@@ -1,0 +1,6 @@
+[dhcpd3]
+    user root
+    env.leasefile /var/lib/dhcpd/dhcpd.leases
+    env.configfile /etc/dhcp/dhcpd.conf
+    env.critical 0.95
+    env.warning 0.9

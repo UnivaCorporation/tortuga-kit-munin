@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+
+# Copyright 2008-2018 Univa Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import sys
+
+from tortuga.node import nodeApiFactory
+
+nodeTypes = {
+    'installed': {
+        'label': 'installed',
+        'draw': 'AREA',
+        'info': 'The number of nodes in Installed state.',
+    },
+    'provisioned': {
+        'label': 'provisioned',
+        'draw': 'STACK',
+        'info': 'The number of nodes in Provisioned state.',
+    },
+    'discovered': {
+        'label': 'discovered',
+        'draw': 'STACK',
+        'info': 'The number of nodes in Discovered state.',
+    },
+    'expired': {
+        'label': 'expired',
+        'draw': 'STACK',
+        'info': 'The number of nodes in Expired state.',
+    },
+    'total': {
+        'label': 'total',
+        'draw': 'LINE1',
+        'info': 'The total number of nodes.',
+    },
+}
+
+
+def main():
+    bConfig = len(sys.argv) == 2 and sys.argv[1] == 'config'
+
+    if bConfig:
+        print 'graph_title Tortuga Nodes'
+        print 'graph_info This graph shows the total number of nodes.'
+        print 'graph_category tortuga'
+        print 'graph_args --base 1000 -l 0'
+        print 'graph_vlabel Number of nodes'
+        print 'graph_order installed provisioned discovered expired total'
+
+        for nodeType, nodeSettings in nodeTypes.iteritems():
+            for key, value in nodeSettings.iteritems():
+                print '%s.%s %s' % (nodeType, key, value)
+        # print 'installed.label installed'
+        # print 'installed.draw STACK'
+        # print 'installed.info 
+
+        sys.exit(0)
+
+    nodes = nodeApiFactory.getNodeApi().getNodeList()
+
+    nInstalled = 0
+    nProvisioned = 0
+    nDiscovered = 0
+    nExpired = 0
+    nTotal = 0
+
+    for node in nodes:
+        state = node.getState()
+        if state == 'Installed':
+            nInstalled += 1
+        elif state == 'Provisioned':
+            nProvisioned += 1
+        elif state == 'Discovered':
+            nDiscovered += 1
+        elif state == 'Expired':
+            nExpired += 1
+
+        nTotal += 1
+
+    print 'installed.value %d' % (nInstalled)
+    print 'provisioned.value %d' % (nProvisioned)
+    print 'discovered.value %d' % (nDiscovered)
+    print 'expired.value %d' % (nExpired)
+    print 'total.value %d' % (nTotal)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,14 @@
+{
+  "name": "univa/tortuga_kit_munin",
+  "version": "6.3.0",
+  "author": "Univa Corporation",
+  "summary": "Integration module for Munin kit",
+  "license": "Commercial",
+  "source": "Univa Corporation",
+  "project_page": "http://univa.com",
+  "issues_url": null,
+  "description": "Integration module for Munin kit",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib"}
+  ]
+}

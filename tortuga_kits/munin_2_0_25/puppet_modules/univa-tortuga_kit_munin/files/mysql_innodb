@@ -1,0 +1,5 @@
+[mysql_innodb]
+ env.mysql /usr/bin/mysql
+ env.mysqlopts --user=root --host=localhost
+ env.warning 2147483648
+ env.critical 1073741824
